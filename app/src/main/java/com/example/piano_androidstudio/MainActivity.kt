@@ -5,6 +5,8 @@ import android.media.SoundPool
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -12,12 +14,35 @@ class MainActivity : AppCompatActivity() {
     private lateinit var soundPool: SoundPool
     private val soundMap = mutableMapOf<Int, Int>()
 
+    private lateinit var songStatusText: TextView
+    private lateinit var startSongButton: Button
+    private val keyViews = mutableMapOf<Int, View>()
+
+    private data class SongNote(val keyId: Int, val label: String)
+
+    private val happyBirthday = listOf(
+        SongNote(R.id.key_c3, "Do"),
+        SongNote(R.id.key_c3, "Do"),
+        SongNote(R.id.key_d3, "Re"),
+        SongNote(R.id.key_c3, "Do"),
+        SongNote(R.id.key_f3, "Fa"),
+        SongNote(R.id.key_e3, "Mi"),
+        SongNote(R.id.key_c3, "Do")
+    )
+
+    private var currentSongIndex = 0
+    private var songActive = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        songStatusText = findViewById(R.id.song_status)
+        startSongButton = findViewById(R.id.btn_start_song)
+
         initSoundPool()
         setupAllKeys()
+        setupLearnSongMode()
     }
 
     private fun initSoundPool() {
@@ -75,11 +100,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupKey(keyId: Int) {
         val keyView = findViewById<View>(keyId)
+        keyViews[keyId] = keyView
         keyView.setOnTouchListener { v, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
                     v.isPressed = true
-                    playSound(keyId)
+                    handleNotePlayed(keyId)
                     v.performClick()
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP, MotionEvent.ACTION_CANCEL -> {
@@ -88,6 +114,51 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    private fun setupLearnSongMode() {
+        startSongButton.setOnClickListener {
+            songActive = true
+            currentSongIndex = 0
+            updateSongStatus("Toca: ${happyBirthday[currentSongIndex].label}")
+            highlightCurrentSongKey()
+        }
+    }
+
+    private fun handleNotePlayed(keyId: Int) {
+        playSound(keyId)
+        if (!songActive) return
+
+        val expected = happyBirthday[currentSongIndex]
+        if (keyId == expected.keyId) {
+            currentSongIndex++
+            if (currentSongIndex >= happyBirthday.size) {
+                updateSongStatus("¡Muy bien! Canción terminada.")
+                songActive = false
+                clearKeyHighlights()
+            } else {
+                updateSongStatus("Correcto. Ahora toca: ${happyBirthday[currentSongIndex].label}")
+                highlightCurrentSongKey()
+            }
+        } else {
+            updateSongStatus("Incorrecto. Toca: ${expected.label}")
+        }
+    }
+
+    private fun updateSongStatus(message: String) {
+        songStatusText.text = message
+    }
+
+    private fun highlightCurrentSongKey() {
+        clearKeyHighlights()
+        if (!songActive) return
+
+        val nextKeyId = happyBirthday[currentSongIndex].keyId
+        keyViews[nextKeyId]?.isSelected = true
+    }
+
+    private fun clearKeyHighlights() {
+        keyViews.values.forEach { it.isSelected = false }
     }
 
     private fun playSound(keyId: Int) {
