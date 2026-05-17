@@ -54,24 +54,24 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <View android:id="@+id/key_c2" android:layout_width="60dp" android:layout_height="match_parent" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_d2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_e2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_f2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_g2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_a2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_b2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_c3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_d3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_e3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_f3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_g3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_a3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_b3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
-                <View android:id="@+id/key_c4" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_c2" android:layout_width="60dp" android:layout_height="match_parent" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_d2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_e2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_f2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_g2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_a2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_b2" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_c3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_d3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_e3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_f3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_g3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_a3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_b3" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
+                <ImageButton android:padding="0dp" android:scaleType="fitXY" android:id="@+id/key_c4" android:layout_width="60dp" android:layout_height="match_parent" android:layout_marginStart="2dp" android:background="@drawable/key_white_selector" />
             </LinearLayout>
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_db2"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -80,7 +80,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_eb2"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -89,7 +89,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_gb2"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -98,7 +98,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_ab2"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -107,7 +107,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_bb2"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -116,7 +116,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_db3"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -125,7 +125,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_eb3"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -134,7 +134,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_gb3"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -143,7 +143,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_ab3"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
@@ -152,7 +152,7 @@
                 android:background="@drawable/key_black_selector"
                 android:elevation="4dp" />
 
-            <View
+            <ImageButton android:padding="0dp" android:scaleType="fitXY"
                 android:id="@+id/key_bb3"
                 android:layout_width="40dp"
                 android:layout_height="180dp"
