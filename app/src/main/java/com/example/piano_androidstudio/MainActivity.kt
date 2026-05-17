@@ -5,7 +5,9 @@ import android.media.SoundPool
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -15,40 +17,77 @@ class MainActivity : AppCompatActivity() {
     private val soundMap = mutableMapOf<Int, Int>()
 
     private lateinit var songStatusText: TextView
-    private lateinit var startSongButton: Button
+    private lateinit var songSpinner: Spinner
     private val keyViews = mutableMapOf<Int, View>()
 
     private data class SongNote(val keyId: Int, val label: String)
 
-    private val happyBirthday = listOf(
-        SongNote(R.id.key_c3, "Do"),
-        SongNote(R.id.key_c3, "Do"),
-        SongNote(R.id.key_d3, "Re"),
-        SongNote(R.id.key_c3, "Do"),
-        SongNote(R.id.key_f3, "Fa"),
-        SongNote(R.id.key_e3, "Mi"),
-        SongNote(R.id.key_c3, "Do")
+    // ── Canciones ──────────────────────────────────────────────
+
+    private val songs = listOf(
+        // Estrellita dónde estás (Do Mayor)
+        "Estrellita dónde estás" to listOf(
+            SongNote(R.id.key_c3, "Do"), SongNote(R.id.key_c3, "Do"),
+            SongNote(R.id.key_g3, "Sol"), SongNote(R.id.key_g3, "Sol"),
+            SongNote(R.id.key_a3, "La"), SongNote(R.id.key_a3, "La"),
+            SongNote(R.id.key_g3, "Sol"),
+            SongNote(R.id.key_f3, "Fa"), SongNote(R.id.key_f3, "Fa"),
+            SongNote(R.id.key_e3, "Mi"), SongNote(R.id.key_e3, "Mi"),
+            SongNote(R.id.key_d3, "Re"), SongNote(R.id.key_d3, "Re"),
+            SongNote(R.id.key_c3, "Do")
+        ),
+
+        // Megalovania – intro (Re menor, octava 2)
+        "Megalovania (inicio)" to listOf(
+            SongNote(R.id.key_d2, "Re"), SongNote(R.id.key_d2, "Re"),
+            SongNote(R.id.key_d3, "Re"), SongNote(R.id.key_a2, "La"),
+            SongNote(R.id.key_ab2, "Lab"), SongNote(R.id.key_g2, "Sol"),
+            SongNote(R.id.key_f2, "Fa"), SongNote(R.id.key_d2, "Re"),
+            SongNote(R.id.key_f2, "Fa"), SongNote(R.id.key_g2, "Sol")
+        ),
+
+        // Zelda OoT – Nana de Zelda (Zelda's Lullaby)
+        "Nana de Zelda" to listOf(
+            SongNote(R.id.key_b2, "Si"), SongNote(R.id.key_d3, "Re"),
+            SongNote(R.id.key_a2, "La"), SongNote(R.id.key_b2, "Si"),
+            SongNote(R.id.key_d3, "Re"), SongNote(R.id.key_a2, "La")
+        ),
+
+        // Zelda OoT – Canción de la Tormenta (Song of Storms)
+        "Canción de la Tormenta" to listOf(
+            SongNote(R.id.key_d2, "Re"), SongNote(R.id.key_f2, "Fa"),
+            SongNote(R.id.key_d3, "Re"), SongNote(R.id.key_d2, "Re"),
+            SongNote(R.id.key_f2, "Fa"), SongNote(R.id.key_d3, "Re")
+        )
     )
 
+    private var currentSongNotes: List<SongNote> = emptyList()
     private var currentSongIndex = 0
     private var songActive = false
+
+    // ── Ciclo de vida ──────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Ensure physical volume buttons change media volume, not ringer volume
+        volumeControlStream = android.media.AudioManager.STREAM_MUSIC
+
         songStatusText = findViewById(R.id.song_status)
-        startSongButton = findViewById(R.id.btn_start_song)
+        songSpinner = findViewById(R.id.spinner_songs)
 
         initSoundPool()
         setupAllKeys()
-        setupLearnSongMode()
+        setupSongSpinner()
     }
+
+    // ── SoundPool ──────────────────────────────────────────────
 
     private fun initSoundPool() {
         val audioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             .build()
 
         soundPool = SoundPool.Builder()
@@ -86,6 +125,8 @@ class MainActivity : AppCompatActivity() {
         soundMap[R.id.key_c4] = soundPool.load(this, R.raw.c4, 1)
     }
 
+    // ── Teclas ──────────────────────────────────────────────────
+
     private fun setupAllKeys() {
         val keys = listOf(
             R.id.key_c2, R.id.key_db2, R.id.key_d2, R.id.key_eb2, R.id.key_e2, R.id.key_f2, R.id.key_gb2, R.id.key_g2, R.id.key_ab2, R.id.key_a2, R.id.key_bb2, R.id.key_b2,
@@ -116,32 +157,62 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupLearnSongMode() {
-        startSongButton.setOnClickListener {
-            songActive = true
-            currentSongIndex = 0
-            updateSongStatus("Toca: ${happyBirthday[currentSongIndex].label}")
-            highlightCurrentSongKey()
+    // ── Desplegable de canciones ────────────────────────────────
+
+    private fun setupSongSpinner() {
+        val songNames = mutableListOf("Seleccionar canción…")
+        songNames.addAll(songs.map { it.first })
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, songNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        songSpinner.adapter = adapter
+
+        songSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position == 0) {
+                    // Opción por defecto – desactivar modo canción
+                    songActive = false
+                    currentSongNotes = emptyList()
+                    clearKeyHighlights()
+                    updateSongStatus("Selecciona una canción para empezar")
+                    return
+                }
+
+                val selectedSong = songs[position - 1]
+                currentSongNotes = selectedSong.second
+                currentSongIndex = 0
+                songActive = true
+                updateSongStatus("Toca: ${currentSongNotes[currentSongIndex].label}")
+                highlightCurrentSongKey()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                songActive = false
+                clearKeyHighlights()
+            }
         }
     }
+
+    // ── Lógica de aprendizaje ───────────────────────────────────
 
     private fun handleNotePlayed(keyId: Int) {
         playSound(keyId)
         if (!songActive) return
 
-        val expected = happyBirthday[currentSongIndex]
+        val expected = currentSongNotes[currentSongIndex]
         if (keyId == expected.keyId) {
             currentSongIndex++
-            if (currentSongIndex >= happyBirthday.size) {
-                updateSongStatus("¡Muy bien! Canción terminada.")
+            if (currentSongIndex >= currentSongNotes.size) {
+                updateSongStatus("¡Muy bien! Canción terminada. 🎉")
                 songActive = false
                 clearKeyHighlights()
+                songSpinner.setSelection(0)
             } else {
-                updateSongStatus("Correcto. Ahora toca: ${happyBirthday[currentSongIndex].label}")
+                updateSongStatus("Correcto ✓  Ahora toca: ${currentSongNotes[currentSongIndex].label}")
                 highlightCurrentSongKey()
             }
         } else {
-            updateSongStatus("Incorrecto. Toca: ${expected.label}")
+            updateSongStatus("Incorrecto ✗  Toca: ${expected.label}")
         }
     }
 
@@ -153,13 +224,15 @@ class MainActivity : AppCompatActivity() {
         clearKeyHighlights()
         if (!songActive) return
 
-        val nextKeyId = happyBirthday[currentSongIndex].keyId
+        val nextKeyId = currentSongNotes[currentSongIndex].keyId
         keyViews[nextKeyId]?.isSelected = true
     }
 
     private fun clearKeyHighlights() {
         keyViews.values.forEach { it.isSelected = false }
     }
+
+    // ── Audio ───────────────────────────────────────────────────
 
     private fun playSound(keyId: Int) {
         val soundId = soundMap[keyId] ?: return

@@ -19,11 +19,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btn_start_song"
+        <Spinner
+            android:id="@+id/spinner_songs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aprender canción" />
+            android:spinnerMode="dropdown"
+            android:backgroundTint="#FFFFFF"
+            android:popupBackground="#333333" />
 
         <TextView
             android:id="@+id/song_status"
